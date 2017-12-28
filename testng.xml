@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite name="Default suite">
+
+ <!-- <listeners>
+    <listener class-name="com.incture.utility.listener.TestListeners"/>
+  </listeners> -->
+  
+  <parameter name="port" value="4441"/>
+	<parameter name="nodeIp" value="172.16.30.239"/>
+	<parameter name="executionType" value="local" />
+	<parameter name="userName" value="FDUser1"/>		
+  <test verbose="2" name="Modules">
+  	
+    <classes>
+      <class name="com.incture.proj.testNg.TestNG"/>
+	</classes>
+  </test> <!-- Default test -->
+  
+	
+</suite> <!-- Default suite -->

@@ -1,0 +1,24 @@
+public static WebElement Sign_out_button(WebDriver driver) {
+WebElement element = PlugInFunctions.expWait(driver, PlugInFunctions.loadXPathfile().getProperty("Sign_out_button"));
+return element;
+}
+public static WebElement Log_out_dropdown_click(WebDriver driver) {
+WebElement element = PlugInFunctions.expWait(driver, PlugInFunctions.loadXPathfile().getProperty("Log_out_dropdown_click"));
+return element;
+}
+public static WebElement config_email(WebDriver driver) {
+WebElement element = PlugInFunctions.expWait(driver, PlugInFunctions.loadXPathfile().getProperty("config_email"));
+return element;
+}
+public static WebElement Week_arrow_left(WebDriver driver) {
+WebElement element = PlugInFunctions.expWait(driver, PlugInFunctions.loadXPathfile().getProperty("Week_arrow_left"));
+return element;
+}
+public static WebElement Time_sheet_cherry(WebDriver driver) {
+WebElement element = PlugInFunctions.expWait(driver, PlugInFunctions.loadXPathfile().getProperty("Time_sheet_cherry"));
+return element;
+}
+public static WebElement config_button(WebDriver driver) {
+WebElement element = PlugInFunctions.expWait(driver, PlugInFunctions.loadXPathfile().getProperty("config_button"));
+return element;
+}

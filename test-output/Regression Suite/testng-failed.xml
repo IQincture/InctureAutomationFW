@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd">
+<suite guice-stage="DEVELOPMENT" name="Failed suite [Regression Suite]">
+  <parameter name="port" value="5553"/>
+  <parameter name="nodeIp" value="172.16.30.140"/>
+  <parameter name="userName" value="FDUser1"/>
+  <test name="Modules(failed)">
+    <classes>
+      <class name="com.incture.proj.testNg.DemoTher">
+        <methods>
+          <include name="beforeTest"/>
+          <include name="afterMethod"/>
+          <include name="test2"/>
+          <include name="afterTest"/>
+          <include name="test1"/>
+        </methods>
+      </class> <!-- com.incture.proj.testNg.DemoTher -->
+    </classes>
+  </test> <!-- Modules(failed) -->
+  <test name="Modules2(failed)">
+    <classes>
+      <class name="com.incture.proj.testNg.DemoTher">
+        <methods>
+          <include name="beforeTest"/>
+          <include name="afterMethod"/>
+          <include name="test2"/>
+          <include name="afterTest"/>
+          <include name="test1"/>
+        </methods>
+      </class> <!-- com.incture.proj.testNg.DemoTher -->
+    </classes>
+  </test> <!-- Modules2(failed) -->
+</suite> <!-- Failed suite [Regression Suite] -->
