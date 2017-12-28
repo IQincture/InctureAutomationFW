@@ -21,8 +21,7 @@ public class AnnotationTestNGImpl2 {
 	@AfterMethod
 	public void afterMethod(){
 		
-		
-	}
+			}
 
 	@Test
 	@TestInfo(TestCaseId = "ABC", TestCaseName = "TestCaseABC")
