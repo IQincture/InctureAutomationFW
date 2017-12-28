@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDateTime;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Properties;
@@ -136,7 +137,8 @@ public static String takeScreenShot(WebDriver driver){
 		try{
 			TakesScreenshot ts = (TakesScreenshot) driver;
 			File source = ts.getScreenshotAs(OutputType.FILE);
-			File destination = new File(Constants.extentReportPath+Constants.extentReportImgFolderName+source.getName());
+			File destination = new File(Constants.extentReportPath+Constants.extentReportImgFolderName+Constants.extentReportImgNameFormate+(LocalDateTime.now()+".png").replaceAll(":", "_"));
+			try{Thread.sleep(1);}catch(Exception e){}
 			org.apache.commons.io.FileUtils.copyFile(source, destination);
 			return Constants.extentReportImgFolderName.replace(Constants.extentReportPath, "")+destination.getName();
 		}

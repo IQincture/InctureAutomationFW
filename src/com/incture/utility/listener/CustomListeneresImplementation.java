@@ -1,5 +1,6 @@
 package com.incture.utility.listener;
 
+import java.time.LocalDateTime;
 import java.util.Map;
 
 import org.testng.IInvokedMethod;
@@ -47,7 +48,8 @@ public class CustomListeneresImplementation implements CustomListeners{
 
 	//ITestListener -- starts
 	public void onTestStart(ITestResult result) {
-		//Constants.reportName=getTestMethodName(result)+".html";
+		if(Constants.isEachTestNGReport.equalsIgnoreCase("Yes"))
+		Constants.reportName=getTestMethodName(result).concat(String.valueOf("_"+LocalDateTime.now()).replaceAll(":", "."))+".html";
 		System.out.println("--> lis onTestStart()" +  getTestMethodName(result) + " start");
 		ExtentReport.startTest(getTestMethodName(result)).assignCategory(PlugInFunctions.getDateNow("dd-MM-yyyy"));
 

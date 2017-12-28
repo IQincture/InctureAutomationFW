@@ -26,7 +26,8 @@ public class ExtentReport {
 	public static synchronized void endTest() {
 		getReporter().endTest((ExtentTest)extentTestMap.get((int) (long) (Thread.currentThread().getId())));
 		getReporter().flush();
-		//report=null;
+		if(Constants.isEachTestNGReport.equalsIgnoreCase("Yes"))
+		report=null;
 	}
 
 	public static synchronized ExtentTest startTest(String testName) {
@@ -43,7 +44,7 @@ public class ExtentReport {
 	}
 	public static ExtentReports getReporter(){
 		new File(Constants.extentReportPath).mkdirs();
-		System.out.println(PlugInFunctions.getConstantProperty("reportName").concat(String.valueOf(LocalDateTime.now()).replaceAll(":", ".")));
+		//System.out.println(PlugInFunctions.getConstantProperty("reportName").concat(String.valueOf(LocalDateTime.now()).replaceAll(":", ".")));
 		if(report==null)
 		report=new ExtentReports(Constants.extentReportPath+Constants.reportName,true);
 		return report;

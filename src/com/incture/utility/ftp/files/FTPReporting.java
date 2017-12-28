@@ -74,8 +74,9 @@ public class FTPReporting {
 					"}"+
 					""+
 					"#myTable th, #myTable td {"+
+					"border: 1px solid black;"+
 					"  text-align: left;"+
-					"  padding: 12px;"+
+					"  padding: 5px;"+
 					"}"+
 					""+
 					"#myTable tr {"+
@@ -83,7 +84,7 @@ public class FTPReporting {
 					"}"+
 					""+
 					"#myTable tr.header, #myTable tr:hover {"+
-					"  background-color: #f1f1f1;"+
+					"  background-color: #778899;"+
 					"}"+
 					".fail {"+
 					"  background-color:red;"+
@@ -119,8 +120,8 @@ public class FTPReporting {
 					""+
 					"<table id='myTable'>"+
 					"  <tr class='header'>"+
-					"    <th style='width:60%;'>SrcFile</th>"+
-					"    <th style='width:40%;'>DestFile</th>"+
+					"    <th style='width:60%;'>Source</th>"+
+					"    <th style='width:40%;'>Destination</th>"+
 					"	<th style='width:40%;'> Status</th>"+
 					"  </tr>";
 			

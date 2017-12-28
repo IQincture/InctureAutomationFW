@@ -31,7 +31,7 @@ public class Ftp {
 	public static void main(String[] args) throws SocketException, IOException {
 
 
-		//compareFTPFilesDirectory_report();
+		compareFTPFilesDirectory_report();
 		//oneToManyFileComparision("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/", "Asame.xml");
 		//compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/Folder1/", "File_4.txt", "File_4.txt");
 		//uploadDirectory("D:/uploadFiles/", "/home/contintegration/Desktop/Upload/");

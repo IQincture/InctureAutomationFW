@@ -1,37 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testng-results skipped="0" failed="0" ignored="0" total="2" passed="2">
+<testng-results skipped="0" failed="0" ignored="1" total="3" passed="2">
   <reporter-output>
   </reporter-output>
-  <suite name="Default suite" duration-ms="1271" started-at="2017-12-27T14:29:26Z" finished-at="2017-12-27T14:29:28Z">
+  <suite name="Default suite" duration-ms="27569" started-at="2017-12-28T09:01:28Z" finished-at="2017-12-28T09:01:56Z">
     <groups>
     </groups>
-    <test name="Default test" duration-ms="1271" started-at="2017-12-27T14:29:26Z" finished-at="2017-12-27T14:29:28Z">
-      <class name="com.incture.proj.testNg.AnnotationTestNGImpl2">
-        <test-method status="PASS" signature="beforeMethod()[pri:0, instance:com.incture.proj.testNg.AnnotationTestNGImpl2@4f933fd1]" name="beforeMethod" is-config="true" duration-ms="7" started-at="2017-12-27T19:59:26Z" finished-at="2017-12-27T19:59:26Z">
+    <test name="Default test" duration-ms="27569" started-at="2017-12-28T09:01:28Z" finished-at="2017-12-28T09:01:56Z">
+      <class name="com.incture.proj.testNg.DemoTher">
+        <test-method status="PASS" signature="beforeTest()[pri:0, instance:com.incture.proj.testNg.DemoTher@d2cc05a]" name="beforeTest" is-config="true" duration-ms="7179" started-at="2017-12-28T14:31:28Z" finished-at="2017-12-28T14:31:36Z">
           <reporter-output>
           </reporter-output>
-        </test-method> <!-- beforeMethod -->
-        <test-method status="PASS" signature="test1()[pri:0, instance:com.incture.proj.testNg.AnnotationTestNGImpl2@4f933fd1]" name="test1" duration-ms="758" started-at="2017-12-27T19:59:26Z" finished-at="2017-12-27T19:59:27Z">
+        </test-method> <!-- beforeTest -->
+        <test-method status="PASS" signature="test1()[pri:0, instance:com.incture.proj.testNg.DemoTher@d2cc05a]" name="test1" duration-ms="1032" started-at="2017-12-28T14:31:36Z" finished-at="2017-12-28T14:31:37Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- test1 -->
-        <test-method status="PASS" signature="afterMethod()[pri:0, instance:com.incture.proj.testNg.AnnotationTestNGImpl2@4f933fd1]" name="afterMethod" is-config="true" duration-ms="1" started-at="2017-12-27T19:59:28Z" finished-at="2017-12-27T19:59:28Z">
+        <test-method status="PASS" signature="afterMethod()[pri:0, instance:com.incture.proj.testNg.DemoTher@d2cc05a]" name="afterMethod" is-config="true" duration-ms="3074" started-at="2017-12-28T14:31:37Z" finished-at="2017-12-28T14:31:40Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterMethod -->
-        <test-method status="PASS" signature="test2()[pri:0, instance:com.incture.proj.testNg.AnnotationTestNGImpl2@4f933fd1]" name="test2" duration-ms="5" started-at="2017-12-27T19:59:28Z" finished-at="2017-12-27T19:59:28Z">
+        <test-method status="PASS" signature="beforeTest()[pri:0, instance:com.incture.proj.testNg.DemoTher@d2cc05a]" name="beforeTest" is-config="true" duration-ms="6679" started-at="2017-12-28T14:31:40Z" finished-at="2017-12-28T14:31:46Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- beforeTest -->
+        <test-method status="PASS" signature="test2()[pri:0, instance:com.incture.proj.testNg.DemoTher@d2cc05a]" name="test2" duration-ms="603" started-at="2017-12-28T14:31:46Z" finished-at="2017-12-28T14:31:47Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- test2 -->
-        <test-method status="PASS" signature="beforeMethod()[pri:0, instance:com.incture.proj.testNg.AnnotationTestNGImpl2@4f933fd1]" name="beforeMethod" is-config="true" duration-ms="0" started-at="2017-12-27T19:59:28Z" finished-at="2017-12-27T19:59:28Z">
-          <reporter-output>
-          </reporter-output>
-        </test-method> <!-- beforeMethod -->
-        <test-method status="PASS" signature="afterMethod()[pri:0, instance:com.incture.proj.testNg.AnnotationTestNGImpl2@4f933fd1]" name="afterMethod" is-config="true" duration-ms="0" started-at="2017-12-27T19:59:28Z" finished-at="2017-12-27T19:59:28Z">
+        <test-method status="PASS" signature="afterMethod()[pri:0, instance:com.incture.proj.testNg.DemoTher@d2cc05a]" name="afterMethod" is-config="true" duration-ms="2880" started-at="2017-12-28T14:31:47Z" finished-at="2017-12-28T14:31:50Z">
           <reporter-output>
           </reporter-output>
         </test-method> <!-- afterMethod -->
-      </class> <!-- com.incture.proj.testNg.AnnotationTestNGImpl2 -->
+        <test-method status="PASS" signature="afterTest()[pri:0, instance:com.incture.proj.testNg.DemoTher@d2cc05a]" name="afterTest" is-config="true" duration-ms="6001" started-at="2017-12-28T14:31:50Z" finished-at="2017-12-28T14:31:56Z">
+          <reporter-output>
+          </reporter-output>
+        </test-method> <!-- afterTest -->
+      </class> <!-- com.incture.proj.testNg.DemoTher -->
     </test> <!-- Default test -->
   </suite> <!-- Default suite -->
 </testng-results>

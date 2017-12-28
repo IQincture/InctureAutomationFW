@@ -14,8 +14,8 @@ public class StringDelete {
 
 	}
 	public static  void method1(){
-		
-		
+		System.out.println((LocalDateTime.now()+".png").replaceAll(":", "_"));
+		System.out.println(LocalDateTime.now()+".png".replaceAll(":", "_"));
 		for(int i=0;i<100;i++)
 		{
 			System.out.println(Instant.now ().toString ());
@@ -24,7 +24,7 @@ public class StringDelete {
 		System.out.println("------------");
 		for(int i=0;i<100;i++)
 		{
-			System.out.println(LocalDateTime.now());
+			System.out.println(LocalDateTime.now()+".png".replace(":", "_"));
 			try{Thread.sleep(1);}catch(Exception e){}
 		}
 		

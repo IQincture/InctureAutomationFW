@@ -22,5 +22,7 @@ public class Constants {
 	public static final String IEDriverServerExe=PlugInFunctions.getConstantProperty("IEDriverServerExe");
 	public static final String xPathfile = PlugInFunctions.getConstantProperty("xPathfile");
 	public static final String isRemote=PlugInFunctions.getConstantProperty("isRemote");
+	public static final String isEachTestNGReport=PlugInFunctions.getConstantProperty("isEachTestNGReport");
+	
 	
 }

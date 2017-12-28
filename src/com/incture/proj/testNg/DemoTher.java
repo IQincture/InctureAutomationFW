@@ -43,8 +43,9 @@ public class DemoTher {
 
 	@Test
 	public void test2(){
-
-
+		Report report =new Report(driver);
+		report.pass("step1", "Validate uwername ", true);
+		report.fail("step1", "Validate uwername ", true);
 	}
 
 
@@ -60,11 +61,12 @@ public class DemoTher {
 	@AfterMethod
 	public  void afterMethod(){
 		System.out.println("afterMethod()");
+		driver.close();
+		driver.quit();
 	}
 	@AfterTest
 	public void afterTest() throws InterruptedException{
-		//driver.close();
-		//driver.quit();
+		
 		System.out.println("afterTest()");
 		Thread.sleep(6000);
 	}
