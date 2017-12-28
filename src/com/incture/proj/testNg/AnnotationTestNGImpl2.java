@@ -22,6 +22,7 @@ public class AnnotationTestNGImpl2 {
 	public void afterMethod(){
 		System.out.println("i am in afterMethod()");
 		System.out.println("i am in afterMethod()");
+		System.out.println("i am in afterMethod()");
 	}
 
 	@Test
