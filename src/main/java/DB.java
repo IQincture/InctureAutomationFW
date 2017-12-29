@@ -134,8 +134,7 @@ public class DB {
 		      try {
 				stmt.executeUpdate(sql);
 				 
-				 DB_URL_db = "jdbc:mysql://localhost/"+excelName;
-				 DB db=new DB(DB_URL_db);
+				 
 				 
 				 System.out.println("database creation successful...");
 			} catch (SQLException e) {
@@ -144,7 +143,8 @@ public class DB {
 				e.printStackTrace();
 			}
 		     
-			
+		      DB_URL_db = "jdbc:mysql://localhost/"+excelName;
+				 DB db=new DB(DB_URL_db);
 			createTable(excelName);
 			
 		}
