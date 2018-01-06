@@ -17,7 +17,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
+import java.util.Map.Entry;
 
 import org.apache.commons.net.ftp.FTP;
 import org.apache.commons.net.ftp.FTPClient;
@@ -30,8 +32,13 @@ public class Ftp {
 	//"/home/contintegration/Desktop/Final_Demo/"
 	public static void main(String[] args) throws SocketException, IOException {
 
-
-		compareFTPFilesDirectory_report();
+		compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/src/Folder1/", "a810cngp.292043", "SENDFILE20170208-103248-843");
+		
+		
+		///
+		
+		
+		//compareFTPFilesDirectory_report();
 		//oneToManyFileComparision("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/", "Asame.xml");
 		//compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/Folder1/", "File_4.txt", "File_4.txt");
 		//uploadDirectory("D:/uploadFiles/", "/home/contintegration/Desktop/Upload/");
@@ -51,7 +58,7 @@ public class Ftp {
 	}
 	
 	
-	
+	/// first we are getting lengh of src aganist dest
 	/**
 	 * 
 	 * @param srcDir
@@ -121,7 +128,7 @@ public class Ftp {
 		return false;
 	}
 	
-	static FTPReporting dirReport=new FTPReporting();
+	static FileReporting dirReport=new FileReporting();
 public static Writer wDir;
 	/**
 	 * compareFTPFilesDirectory --> is to compare files & folder in the src & destination directory
@@ -159,11 +166,12 @@ public static Writer wDir;
 					if(dir1File.isDirectory())
 						compareFTPFilesDirectory(dir1+dir1File.getName()+"/", dir2+dir2File.getName()+"/");
 					else if(dir1File.isFile()){
-						boolean compare=compareFTPFiles(dir1, dir2,dir1File.getName(),dir2File.getName());
-						if(compare)
-							dirReport.writeTableData_HyperLink(wDir, dir1File.getName(), dir2File.getName(), "pass");
+						Map<String, String> compare=compareFTPFiles(dir1, dir2,dir1File.getName(),dir2File.getName());
+						if(compare.get("flag").equals("true"))
+							dirReport.writeTableData_HyperLink(wDir, dir1File.getName(),"", dir2File.getName(),"", "pass");
 						else
-							dirReport.writeTableData_HyperLink(wDir, dir1File.getName(), dir2File.getName(), "fail");
+							dirReport.writeTableData_HyperLink(wDir, dir1File.getName()," has (Total:"+compare.get("S_T")+",Unique:"+compare.get("S_U")+",Diff:"+compare.get("S_D")+",Blank:"+compare.get("S_B")+")",
+																	 dir2File.getName()," has (Total:"+compare.get("D_T")+",Unique:"+compare.get("D_U")+",Diff:"+compare.get("D_D")+",Blank:"+compare.get("D_B")+")", "fail");
 					}
 				}
 
@@ -405,12 +413,15 @@ public static Writer wDir;
 	 * @param fileName  Eg:- File_2.odt
 	 * @throws IOException
 	 */
-	public static boolean compareFTPFiles(String compPath1,String compPath2,String srcFileName,String destFileName) throws IOException{
+	public static Map<String, String> compareFTPFiles(String compPath1,String compPath2,String srcFileName,String destFileName) throws IOException{
 
+		Map<String, String>	results=new HashMap<>();
+		
+		
 		/*if(fileName.equals("same.txt")){
 			System.out.println();
 		}*/
-		FTPReporting ftp=new FTPReporting();
+		FileReporting ftp=new FileReporting();
 			Writer w=ftp.createReport("D:\\Reports\\FTPReports\\"+srcFileName+"_"+destFileName+".html");
 			ftp.writeHeaderPart(w);
 		
@@ -434,7 +445,7 @@ public static Writer wDir;
 
 		boolean areEqual = true;
 
-		int srcLineNo = 1,destLineNo = 1;
+		int srcLineNo = 1,destLineNo = 1,uniqueLinesNo = 0,diffLinesNo = 0;
 		ArrayList<Integer> srcblankLine=new ArrayList<>();
 		ArrayList<Integer> destblankLine=new ArrayList<>();
 
@@ -450,11 +461,22 @@ public static Writer wDir;
 			}
 			else if(! line1.equals(line2))
 			{
+				
+				if(verifyRuleSet(line1, line2)){
+					
+					ftp.writeTableData(w, line1, line2, "warning");
+				}else{
+					
+				
 				areEqual = false;
 				System.out.println(srcFileName+"(Src) & "+destFileName+"(Dest)-  Mismatch data  @   "+line1+" --and destination file  has --"+line2+" at line"+srcLineNo);
+				diffLinesNo++;
 				ftp.writeTableData(w, line1, line2, "fail");
+				}
+				
 				//break;
 			}else{
+				uniqueLinesNo++;
 				ftp.writeTableData(w, line1, line2, "pass");	
 			}
 
@@ -477,7 +499,7 @@ public static Writer wDir;
 		}while (line1 != null || line2 != null);
 
 		if(areEqual)
-		{
+		{	
 			System.out.println(srcFileName+"(Src) & "+destFileName+"(Dest)- has same content.");
 			ftp.writeTableData(w, srcFileName, destFileName, "pass");	
 
@@ -504,7 +526,20 @@ public static Writer wDir;
 		Ftp.closeFTPConnection(ftpCon2);
 		ftp.writeFotterPart(w);
 		ftp.closeReport(w);
-		return areEqual;
+		
+		results.put("S_T", srcLineNo+"");
+		results.put("S_U", uniqueLinesNo+"");
+		results.put("S_B",srcblankLine.size()+"");
+		results.put("S_D", diffLinesNo+"");
+
+		results.put("D_T", destLineNo+"");
+		results.put("D_U", uniqueLinesNo+"");
+		results.put("D_B",destblankLine.size()+"");
+		results.put("D_D", diffLinesNo+"");
+		
+		results.put("flag",areEqual+"");
+		
+		return results;
 	}
 	/**
 	 * uploadFile --> is to upload file to remote ftp server
@@ -685,5 +720,47 @@ public static Writer wDir;
 		reader1.close();
 		return noofLines;
 	}
+	
+public static boolean verifyRuleSet(String str1,String str2){
+	
+	Map<String, String> formatStringEg=new HashMap<>();
+	Map<String, String> formatExpression=new HashMap<>();
+	Map<String, String> formatReplace=new HashMap<>();
+	
+	formatStringEg.put("format1", "HEADER 2/17/2016 1:17:31 PM  ");
+	formatExpression.put("format1", ".*\\s\\d{1,2}[\\/|-]{1}\\d{1,2}[\\/|-]{1}\\d{1,4}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}\\s[APM]{2}.*");
+	formatReplace.put("format1", "\\d{1,2}[\\/|-]{1}\\d{1,2}[\\/|-]{1}\\d{1,4}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}\\s[APM]{2}");
+	
+	formatStringEg.put("format2", "<order>12345675</order>");
+	formatExpression.put("format2", ".*<order>\\d{8}</order>*.");
+	formatReplace.put("format2", "\\d{8}");
+	
+	
+	
+	for(Entry<String, String> format:formatExpression.entrySet()){
+		
+		if(str1.matches(format.getValue())){
+			str1=str1.replaceAll(formatReplace.get(format.getKey()), "");
+			//break;
+		}
+				
+	}
+	for(Entry<String, String> format:formatExpression.entrySet()){
+		
+		
+		if(str2.matches(format.getValue())){
+			str2=str2.replaceAll(formatReplace.get(format.getKey()), "");
+			//break;
+		}			
+	}
+	
+	
+	if(str1.equals(str2)){
+		return true;
+	}
+	
+	
+	return false;
+}
 
 }
