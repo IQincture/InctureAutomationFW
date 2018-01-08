@@ -26,7 +26,7 @@ public class FileReporting {
 
 	public Writer createReport(String fileName){
 		try{
-			
+
 			File statText = new File(fileName);
 			FileOutputStream is = new FileOutputStream(statText);
 			OutputStreamWriter osw = new OutputStreamWriter(is);    
@@ -160,15 +160,19 @@ public class FileReporting {
 			w.write("<td class='fail'>"+destText+"</td>");
 			w.write("<td class='fail'>"+status+"</td>");
 				 */
-				}	else if(status.equals("warning")){
-					/* w.write("<td class='warning' >"+srcText+"</td>");
-					 w.write("<td class='warning'>"+destText+"</td>");*/
-					
-					w.write("<td >"+get_Str1_Html(srcText, destText,"warning")+"</td>");
+			}	else if(status.equals("warning")){
+				/* w.write("<td class='warning' >"+srcText+"</td>");
+					 w.write("<td class='warning'>"+destText+"</td>");
+					 w.write("<td >"+get_Str1_Html(srcText, destText,"warning")+"</td>");
 					w.write("<td >"+get_Str2_Html(srcText, destText,"warning")+"</td>");
 					 w.write("<td class='warning'>"+status+"</td>");
+				 */
 
-				 }		
+				w.write("<td >"+charDiff(srcText, destText,"warning")+"</td>");
+				w.write("<td >"+charDiff(destText, srcText,"warning")+"</td>");
+				w.write("<td class='warning'>"+status+"</td>");
+
+			}		
 			w.write("  </tr>");
 
 		} catch (IOException e) {
@@ -231,7 +235,7 @@ public class FileReporting {
 			if(list2.contains(list1.get(i)))
 			{
 				if(i<list1.size()-1){
-				//	System.out.print(list1.get(i)+" ");
+					//	System.out.print(list1.get(i)+" ");
 					temp=temp+list1.get(i)+" ";
 				}
 				else{
@@ -242,11 +246,11 @@ public class FileReporting {
 			}else{
 
 				if(i<list1.size()-1){
-					
+
 					temp=temp+"<span class='"+fail_warning+"'>"+list1.get(i)+" </span>";
 				}
 				else{
-					
+
 					temp=temp+"<span class='"+fail_warning+"'>"+list1.get(i)+"</span>";
 				}
 			}	
@@ -282,11 +286,11 @@ public class FileReporting {
 			}else{
 
 				if(i<list2.size()-1){
-					
+
 					temp=temp+"<span class='"+fail_warning+"'>"+list2.get(i)+" </span>";
 				}
 				else{
-					
+
 					temp=temp+"<span class='"+fail_warning+"'>"+list2.get(i)+"</span>";
 				}
 			}	
@@ -294,20 +298,20 @@ public class FileReporting {
 		return temp;
 
 	}
-	
-public static String charDiff(String str1,String str2,String status){
-		
-		
+
+	public static String charDiff(String str1,String str2,String status){
+
+
 		String result="";
-		
+
 		char[] cStr1=str1.toCharArray();
 		char[] cStr2=str2.toCharArray();
-		
-		
+
+
 		for(int i=0;i<cStr1.length;i++){
-			
+
 			for(int j=i;j<cStr2.length;j++){
-				
+
 				if(cStr1[i]==cStr2[j]){
 					result=result+cStr1[i];
 					break;
@@ -315,19 +319,19 @@ public static String charDiff(String str1,String str2,String status){
 					result=result+"<span class='"+status+"'>"+cStr1[i]+"</span>";	
 					break;
 				}
-				
+
 			}
-			
+
 		}
-		
+
 
 		if(str1.length()>str2.length()){
 			result=result+"<span class='fail'>"+str1.substring(str2.length(), str1.length())+"</span>";
 		}
-		
+
 		return result;
 
-		
+
 	}
 
 }
