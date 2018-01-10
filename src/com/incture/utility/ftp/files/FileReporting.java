@@ -6,6 +6,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -150,8 +151,8 @@ public class FileReporting {
 				w.write("<td>"+status+"</td>");
 
 			}else if(status.equals("fail")){
-				w.write("<td >"+charDiff(srcText, destText,"fail")+"</td>");
-				w.write("<td >"+charDiff(destText, srcText,"fail")+"</td>");
+				w.write("<td >"+findDiffStrings(srcText, destText,"fail")+"</td>");
+				w.write("<td >"+findDiffStrings(destText, srcText,"fail")+"</td>");
 				w.write("<td class='fail' >"+status+"</td>");
 
 
@@ -299,10 +300,9 @@ public class FileReporting {
 
 	}
 
-	public static String charDiff(String str1,String str2,String status){
+	public static StringBuffer charDiff(String str1,String str2,String fail_warning){
 
-
-		String result="";
+		StringBuffer result=new StringBuffer();
 
 		char[] cStr1=str1.toCharArray();
 		char[] cStr2=str2.toCharArray();
@@ -313,10 +313,10 @@ public class FileReporting {
 			for(int j=i;j<cStr2.length;j++){
 
 				if(cStr1[i]==cStr2[j]){
-					result=result+cStr1[i];
+					result=result.append(cStr1[i]);
 					break;
 				}else{
-					result=result+"<span class='"+status+"'>"+cStr1[i]+"</span>";	
+					result=result.append("<span class='"+fail_warning+"'>"+cStr1[i]+"</span>");	
 					break;
 				}
 
@@ -326,12 +326,81 @@ public class FileReporting {
 
 
 		if(str1.length()>str2.length()){
-			result=result+"<span class='fail'>"+str1.substring(str2.length(), str1.length())+"</span>";
+			result=result.append("<span class='"+fail_warning+"'>"+str1.substring(str2.length(), str1.length())+"</span>");
 		}
 
 		return result;
 
 
 	}
+	//---------- new code ---------
+
+	public static StringBuffer findDiffStrings(String s1, String s2,String fail_warning){
+		
+		if(s1.length()==s2.length())
+		{
+			return charDiff(s1, s2, fail_warning);
+		}else {
+			return printCommonSubstrings(s1, s2, fail_warning);
+		}
+		
+		
+	}
+	
+public static StringBuffer printCommonSubstrings(String s1, String s2,String fail_warning) {
+	StringBuffer sb=new StringBuffer();
+	String lastMatch="";
+   for (int i = 0; i < s1.length();) {
+       List<String> list = new ArrayList<String>();
+       for (int j = i; j < s1.length(); j++) {
+           String subStr = s1.substring(i, j + 1);
+           if (isSubstring(subStr, s2)) {
+               list.add(subStr);
+           }
+       }
+       if (!list.isEmpty()) {
+           String s = list.get(list.size() - 1);
+           lastMatch=s;
+           s2=s2.replace(lastMatch,"");
+           //commonSubstrings.add(s);
+         //  System.out.print(s);
+           sb.append(s);
+           i += s.length();
+       }else{
+    	   //System.out.print("<red>"+s1.charAt(i)+"</red>");
+    	   sb.append("<span class='"+fail_warning+"'>"+s1.charAt(i)+"</span>");
+    	   i++;
+       }
+   }
+   return sb;
+}
+
+public static boolean isSubstring(String s1, String s2) {
+   boolean isSubstring = true;
+   int strLen = s2.length();
+   int strToCheckLen = s1.length();
+   if (strToCheckLen > strLen) {
+       isSubstring = false;
+   } else {
+       for (int i = 0; i <= (strLen - strToCheckLen); i++) {
+           int index = i;
+           int startingIndex = i;
+           for (int j = 0; j < strToCheckLen; j++) {
+               if (!(s1.charAt(j) == s2.charAt(index))) {
+                   break;
+               } else {
+                   index++;
+               }
+           }
+           if ((index - startingIndex) < strToCheckLen) {
+               isSubstring = false;
+           } else {
+               isSubstring = true;
+               break;
+           }
+       }
+   }
+   return isSubstring;
+}
 
 }
