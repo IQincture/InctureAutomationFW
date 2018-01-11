@@ -9,6 +9,7 @@ import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.regex.Pattern;
 
 public class FileReporting {
 
@@ -350,25 +351,27 @@ public class FileReporting {
 public static StringBuffer printCommonSubstrings(String s1, String s2,String fail_warning) {
 	StringBuffer sb=new StringBuffer();
 	String lastMatch="";
+	String s2Lenth="";
    for (int i = 0; i < s1.length();) {
        List<String> list = new ArrayList<String>();
        for (int j = i; j < s1.length(); j++) {
            String subStr = s1.substring(i, j + 1);
-           if (isSubstring(subStr, s2)) {
+           if (isSubstring(subStr, s2)&&s1.charAt(i)==s2.charAt(i-s2Lenth.length())) {
                list.add(subStr);
            }
        }
        if (!list.isEmpty()) {
            String s = list.get(list.size() - 1);
            lastMatch=s;
-           s2=s2.replace(lastMatch,"");
-           //commonSubstrings.add(s);
+           s2Lenth=s2Lenth+lastMatch;
+           s2=s2.replaceFirst(Pattern.quote(lastMatch),"");
+          // commonSubstrings.add(s);
          //  System.out.print(s);
            sb.append(s);
            i += s.length();
        }else{
     	   //System.out.print("<red>"+s1.charAt(i)+"</red>");
-    	   sb.append("<span class='"+fail_warning+"'>"+s1.charAt(i)+"</span>");
+    	   sb.append("<span class='fail'>"+s1.charAt(i)+"</span>");
     	   i++;
        }
    }
