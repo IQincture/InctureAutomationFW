@@ -34,7 +34,7 @@ public class Ftp {
 	//"/home/contintegration/Desktop/Final_Demo/"
 	public static void main(String[] args) throws SocketException, IOException {
 
-		compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/src/Folder1/", "a810cngp.292043", "SENDFILE20170208-103248-843");
+		compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/src/Folder1/", "Asame1.xml", "Asame2.xml");
 
 
 		///
@@ -43,13 +43,13 @@ public class Ftp {
 		//compareFTPFilesDirectory_report();
 		//oneToManyFileComparision("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/", "Asame.xml");
 		//compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/Folder1/", "File_4.txt", "File_4.txt");
-		//uploadDirectory("D:/uploadFiles/", "/home/contintegration/Desktop/Upload/");
-		//download_Directory( "D:/download/", "/home/contintegration/Desktop/Upload/");
+		//uploadDirectory("E:/uploadFiles/", "/home/contintegration/Desktop/Upload/");
+		//download_Directory( "E:/download/", "/home/contintegration/Desktop/Upload/");
 	}
 
 
 	public static void compareFTPFilesDirectory_report()throws SocketException, IOException {
-		wDir=dirReport.createReport("D:\\Reports\\FTPReports\\SummaryReport.html");
+		wDir=dirReport.createReport("E:\\Reports\\FTPReports\\SummaryReport.html");
 		dirReport.writeHeaderPart(wDir);
 
 
@@ -424,7 +424,8 @@ public class Ftp {
 			System.out.println();
 		}*/
 		FileReporting ftp=new FileReporting();
-		Writer w=ftp.createReport("D:\\Reports\\FTPReports\\"+srcFileName+"_"+destFileName+".html");
+		
+		Writer w=ftp.createReport("E:\\Reports\\FTPReports\\"+srcFileName+"_"+destFileName+".html");
 		ftp.writeHeaderPart(w);
 
 		FTPClient ftpCon1=Ftp.getFTPConnection();
@@ -545,7 +546,7 @@ public class Ftp {
 	}
 	/**
 	 * uploadFile --> is to upload file to remote ftp server
-	 * @param localFilePath eg:- D:/uploadFiles/Testing.pdf
+	 * @param localFilePath eg:- E:/uploadFiles/Testing.pdf
 	 * @param remotePath eg:-/home/contintegration/Desktop/Final_Demo/
 	 * @return
 	 * @throws IOException
@@ -573,7 +574,7 @@ public class Ftp {
 
 	/**
 	 * uploadDirectory --> is to upload from local drive to remote FTP server 
-	 * @param localDir  -->D:/uploadFiles/
+	 * @param localDir  -->E:/uploadFiles/
 	 * @param remoteDir -->/home/contintegration/Desktop/Final_Demo/
 	 * @throws IOException
 	 */
@@ -613,9 +614,9 @@ public class Ftp {
 		}
 	}
 	/**
-	 * "/home/contintegration/Desktop/Final_Demo/PayloadXL3.xml", "D:/uploadFiles/"
+	 * "/home/contintegration/Desktop/Final_Demo/PayloadXL3.xml", "E:/uploadFiles/"
 	 * @param remoteFilePath /home/contintegration/Desktop/Final_Demo/PayloadXL3.xml
-	 * @param localPath  D:/uploadFiles/
+	 * @param localPath  E:/uploadFiles/
 	 * @throws SocketException 
 	 * @throws IOException
 	 */

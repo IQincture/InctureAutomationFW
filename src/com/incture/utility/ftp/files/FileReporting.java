@@ -18,7 +18,7 @@ public class FileReporting {
 
 	public static void main(String[] args) {
 		FileReporting ftp=new FileReporting();
-		Writer w=ftp.createReport("D:\\Reports\\FtpReport.html");
+		Writer w=ftp.createReport("E:\\Reports\\FtpReport.html");
 		ftp.writeHeaderPart(w);
 		ftp.writeTableData(w, "HI Hello", "HI Hello", "pass");	
 		ftp.writeTableData(w, "HI Hello", "HI Hellod", "fail");	
@@ -356,7 +356,7 @@ public static StringBuffer printCommonSubstrings(String s1, String s2,String fai
        List<String> list = new ArrayList<String>();
        for (int j = i; j < s1.length(); j++) {
            String subStr = s1.substring(i, j + 1);
-           if (isSubstring(subStr, s2)&&s1.charAt(i)==s2.charAt(i-s2Lenth.length())) {
+           if (isSubstring(subStr, s2)) {
                list.add(subStr);
            }
        }
