@@ -188,15 +188,15 @@ public class FileReporting {
 			w.write("  <tr>");
 
 			if(status.equals("pass")){
-				w.write("<td><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+srcFileName+"</a></td>");//<a href="File_4.txt_File_4.txt.html" target="_blank">Src.txt</a>
-				w.write("<td><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+destFileName+"</a></td>");//<a href="File_4.txt_File_4.txt.html" target="_blank">Src.txt</a>
+				w.write("<td><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+srcFileName+srcFileInfo+"</a></td>");//<a href="File_4.txt_File_4.txt.html" target="_blank">Src.txt</a>
+				w.write("<td><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+destFileName+destFileInfo+"</a></td>");//<a href="File_4.txt_File_4.txt.html" target="_blank">Src.txt</a>
 				w.write("<td><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+status+"</a></td>");//<a href="File_4.txt_File_4.txt.html" target="_blank">Src.txt</a>
 
 
 			}else if(status.equals("fail")){
-				w.write("<td class='fail'><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+srcFileName+srcFileInfo+"</a></td>");
-				w.write("<td class='fail'><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+destFileName+destFileInfo+"</a></td>");
-				w.write("<td class='fail'><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+status+"</a></td>");
+				w.write("<td ><span class='fail'><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+srcFileName+srcFileInfo+"</a></span></td>");
+				w.write("<td ><span class='fail'><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+destFileName+destFileInfo+"</a></span></td>");
+				w.write("<td ><span class='fail'><a href='"+srcFileName+"_"+destFileName+".html' target='_blank'>"+status+"</a></span></td>");
 
 			}		
 			w.write("  </tr>");
@@ -221,7 +221,7 @@ public class FileReporting {
 		}
 	}
 
-	public static String get_Str1_Html(String str1,String str2,String fail_warning){
+	public static StringBuffer get_Str1_Html(String str1,String str2,String fail_warning){
 
 
 		String[] strList1 = str1.split(" ");
@@ -230,7 +230,7 @@ public class FileReporting {
 		List<String> list1 = Arrays.asList(strList1);
 		List<String> list2 = Arrays.asList(strList2);
 
-		String temp="";
+		StringBuffer temp=new StringBuffer();
 
 		for(int i=0;i<list1.size();i++){
 
@@ -238,22 +238,22 @@ public class FileReporting {
 			{
 				if(i<list1.size()-1){
 					//	System.out.print(list1.get(i)+" ");
-					temp=temp+list1.get(i)+" ";
+					temp=temp.append(list1.get(i)+" ");
 				}
 				else{
 					//System.out.print(list1.get(i));
-					temp=temp+list1.get(i);
+					temp=temp.append(list1.get(i));
 				}
 
 			}else{
 
 				if(i<list1.size()-1){
 
-					temp=temp+"<span class='"+fail_warning+"'>"+list1.get(i)+" </span>";
+					temp=temp.append("<span class='"+fail_warning+"'>"+list1.get(i)+" </span>");
 				}
 				else{
 
-					temp=temp+"<span class='"+fail_warning+"'>"+list1.get(i)+"</span>";
+					temp=temp.append("<span class='"+fail_warning+"'>"+list1.get(i)+"</span>");
 				}
 			}	
 		}
@@ -261,6 +261,85 @@ public class FileReporting {
 
 	}
 
+	public static StringBuffer get_Str1_Html_SpecialCharter(String str1,String str2,String fail_warning){
+
+
+		String[] strList1 = str1.split("~");
+		String[] strList2 = str2.split("~");
+
+		List<String> list1 = Arrays.asList(strList1);
+		List<String> list2 = Arrays.asList(strList2);
+
+		StringBuffer temp=new StringBuffer();
+
+		for(int i=0;i<list1.size();i++){
+
+			if(list2.contains(list1.get(i)))
+			{
+				if(i<list1.size()-1){
+					//	System.out.print(list1.get(i)+" ");
+					temp=temp.append(list1.get(i)+" ");
+				}
+				else{
+					//System.out.print(list1.get(i));
+					temp=temp.append(list1.get(i));
+				}
+
+			}else{
+
+				if(i<list1.size()-1){
+
+					temp=temp.append("<span class='"+fail_warning+"'>"+list1.get(i)+" </span>");
+				}
+				else{
+
+					temp=temp.append("<span class='"+fail_warning+"'>"+list1.get(i)+"</span>");
+				}
+			}	
+		}
+		return temp;
+
+	}
+
+	public static StringBuffer imp_Html_SpecialCharter(String str1,String str2,String fail_warning){
+
+
+		String[] strList1 = str1.split("~");
+		String[] strList2 = str2.split("~");
+
+		List<String> list1 = Arrays.asList(strList1);
+		List<String> list2 = Arrays.asList(strList2);
+
+		StringBuffer temp=new StringBuffer();
+
+		for(int i=0;i<list1.size();i++){
+
+			if(list2.contains(list1.get(i)))
+			{
+				if(i<list1.size()-1){
+					//	System.out.print(list1.get(i)+" ");
+					temp=temp.append(list1.get(i)+" ");
+				}
+				else{
+					//System.out.print(list1.get(i));
+					temp=temp.append(list1.get(i));
+				}
+
+			}else{
+
+				if(i<list1.size()-1){
+
+					temp=temp.append("<span >"+imp_printCommonSubstrings(list1.get(i), list2.get(i), fail_warning)+" </span>");
+				}
+				else{
+
+					temp=temp.append("<span >"+imp_printCommonSubstrings(list1.get(i), list2.get(i), fail_warning)+"</span>");
+				}
+			}	
+		}
+		return temp;
+
+	}
 	public static String get_Str2_Html(String str1,String str2,String fail_warning){
 
 
@@ -305,6 +384,8 @@ public class FileReporting {
 
 		StringBuffer result=new StringBuffer();
 
+
+
 		char[] cStr1=str1.toCharArray();
 		char[] cStr2=str2.toCharArray();
 
@@ -317,7 +398,7 @@ public class FileReporting {
 					result=result.append(cStr1[i]);
 					break;
 				}else{
-					result=result.append("<span class='"+fail_warning+"'>"+cStr1[i]+"</span>");	
+					result=result.append("<span class='"+fail_warning+"'>"+cStr1[i]+"</span>");
 					break;
 				}
 
@@ -337,73 +418,122 @@ public class FileReporting {
 	//---------- new code ---------
 
 	public static StringBuffer findDiffStrings(String s1, String s2,String fail_warning){
-		
+		/*
 		if(s1.length()==s2.length())
 		{
-			return charDiff(s1, s2, fail_warning);
-		}else {
+		 *///return charDiff(s1, s2, fail_warning);
+		/*}else {
 			return printCommonSubstrings(s1, s2, fail_warning);
 		}
-		
-		
-	}
-	
-public static StringBuffer printCommonSubstrings(String s1, String s2,String fail_warning) {
-	StringBuffer sb=new StringBuffer();
-	String lastMatch="";
-	String s2Lenth="";
-   for (int i = 0; i < s1.length();) {
-       List<String> list = new ArrayList<String>();
-       for (int j = i; j < s1.length(); j++) {
-           String subStr = s1.substring(i, j + 1);
-           if (isSubstring(subStr, s2)&&s1.charAt(i)==s2.charAt(i-s2Lenth.length())) {
-               list.add(subStr);
-           }
-       }
-       if (!list.isEmpty()) {
-           String s = list.get(list.size() - 1);
-           lastMatch=s;
-           s2Lenth=s2Lenth+lastMatch;
-           s2=s2.replaceFirst(Pattern.quote(lastMatch),"");
-          // commonSubstrings.add(s);
-         //  System.out.print(s);
-           sb.append(s);
-           i += s.length();
-       }else{
-    	   //System.out.print("<red>"+s1.charAt(i)+"</red>");
-    	   sb.append("<span class='fail'>"+s1.charAt(i)+"</span>");
-    	   i++;
-       }
-   }
-   return sb;
-}
+		 */
 
-public static boolean isSubstring(String s1, String s2) {
-   boolean isSubstring = true;
-   int strLen = s2.length();
-   int strToCheckLen = s1.length();
-   if (strToCheckLen > strLen) {
-       isSubstring = false;
-   } else {
-       for (int i = 0; i <= (strLen - strToCheckLen); i++) {
-           int index = i;
-           int startingIndex = i;
-           for (int j = 0; j < strToCheckLen; j++) {
-               if (!(s1.charAt(j) == s2.charAt(index))) {
-                   break;
-               } else {
-                   index++;
-               }
-           }
-           if ((index - startingIndex) < strToCheckLen) {
-               isSubstring = false;
-           } else {
-               isSubstring = true;
-               break;
-           }
-       }
-   }
-   return isSubstring;
-}
+		//	return printCommonSubstrings(s1, s2, fail_warning);
+		//return charDiff(s1, s2, fail_warning);
+		//return get_Str1_Html_SpecialCharter(s1, s2, fail_warning);
+		return	imp_Html_SpecialCharter(s1, s2, fail_warning);
+		//	return get_Str1_Html(s1, s2, fail_warning);
+	}
+
+
+	public static StringBuffer imp_printCommonSubstrings(String s1, String s2,String fail_warning) {
+		String s1aWithoutS[]=s1.split("\\*");
+		String s2aWithoutS[]=s2.split("\\*");
+		String s1a[]=new String[s1aWithoutS.length];
+		String s2a[]=new String[s2aWithoutS.length];
+
+		if(s1.contains("*")&&s1aWithoutS.length>1&&s2aWithoutS.length>1){
+			for(int i=0;i<s1aWithoutS.length;i++)
+				s1a[i]=s1aWithoutS[i]+"*";
+			for(int i=0;i<s2aWithoutS.length;i++)
+				s2a[i]=s2aWithoutS[i]+"*";
+
+		}else{
+
+			for(int i=0;i<s1aWithoutS.length;i++)
+				s1a[i]=s1aWithoutS[i];
+			for(int i=0;i<s2aWithoutS.length;i++)
+				s2a[i]=s2aWithoutS[i];
+
+		}
+
+
+		StringBuffer sb=new StringBuffer();
+		if(s1a.length==s2a.length){
+			for(int i=0;i<s1a.length;i++){
+				sb.append(printCommonSubstrings(s1a[i], s2a[i], fail_warning));
+			}
+		}/*else if(s1a.length>s2a.length){
+
+			int bi=0;
+			for(int i=0;i<s2a.length;i++){
+
+				System.out.println(s1a[bi].length());
+				sb.append(printCommonSubstrings(s1a[bi], s2a[i], fail_warning));
+				bi++;
+			}
+		}*/
+		else
+			sb.append(printCommonSubstrings(s1, s2, fail_warning));
+
+
+		return sb;
+	}
+	public static StringBuffer printCommonSubstrings(String s1, String s2,String fail_warning) {
+		StringBuffer sb=new StringBuffer();
+		String lastMatch="";
+		for (int i = 0; i < s1.length();) {
+			List<String> list = new ArrayList<String>();
+			for (int j = i; j < s1.length(); j++) {
+				String subStr = s1.substring(i, j + 1);
+				if (isSubstring(subStr, s2)) {
+					list.add(subStr);
+				}
+			}
+			if (!list.isEmpty()) {
+				String s = list.get(list.size() - 1);
+				lastMatch=s;
+				//  s2=s2.replace(lastMatch,"");
+				s2=s2.replaceFirst(Pattern.quote(lastMatch),"");
+
+				//commonSubstrings.add(s);
+				//  System.out.print(s);
+				sb.append(s);
+				i += s.length();
+			}else{
+				//System.out.print("<red>"+s1.charAt(i)+"</red>");
+				sb.append("<span class='"+fail_warning+"'>"+s1.charAt(i)+"</span>");
+				i++;
+			}
+		}
+		return sb;
+	}
+
+	public static boolean isSubstring(String s1, String s2) {
+		boolean isSubstring = true;
+		int strLen = s2.length();
+		int strToCheckLen = s1.length();
+		if (strToCheckLen > strLen) {
+			isSubstring = false;
+		} else {
+			for (int i = 0; i <= (strLen - strToCheckLen); i++) {
+				int index = i;
+				int startingIndex = i;
+				for (int j = 0; j < strToCheckLen; j++) {
+					if (!(s1.charAt(j) == s2.charAt(index))) {
+						break;
+					} else {
+						index++;
+					}
+				}
+				if ((index - startingIndex) < strToCheckLen) {
+					isSubstring = false;
+				} else {
+					isSubstring = true;
+					break;
+				}
+			}
+		}
+		return isSubstring;
+	}
 
 }
