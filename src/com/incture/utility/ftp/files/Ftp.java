@@ -10,10 +10,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.Writer;
 import java.net.SocketException;
+import java.text.Format;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -26,21 +30,32 @@ import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
+import com.incture.utility.Constants;
 import com.incture.utility.excel.Excel;
 public class Ftp {
 
-
-	//"/home/contintegration/Desktop/demo/"
-	//"/home/contintegration/Desktop/Final_Demo/"
+	public static String ExcelPath=".//src//com//incture//proj//testData//FileCompareRulesSet.xlsx";
 	public static void main(String[] args) throws SocketException, IOException {
 
-		compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/src/Folder1/", "a810cngp.292043", "SENDFILE20170208-103248-843");
+
+		dateFormate="dd-MMM-yyyy HH:mm:ss";
+
+		/*		fromDateFormat = "11-Jan-2018 16:00:00";
+		toDateFormat = "11-Jan-2018 18:00:00";
+		 */
+		/*fromDateFormat = "11-Jan-2018 16:00:00";
+		toDateFormat = "13-Jan-2018 18:00:00";
+		 */
+
+		fromDateFormat = "13-Jan-2018 16:00:00";
+		toDateFormat = "16-Jan-2018 18:00:00";
 
 
-		///
+		compareIdocNumberes("/home/contintegration/Desktop/src/", "/home/contintegration/Desktop/dest/");
 
 
-		//compareFTPFilesDirectory_report();
+		//compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/Folder1/", "Gentran_Sample_File.txt", "Gentran_Sample_File.txt");
+		//	compareFTPFilesDirectory_report();
 		//oneToManyFileComparision("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/", "Asame.xml");
 		//compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/Folder1/", "File_4.txt", "File_4.txt");
 		//uploadDirectory("D:/uploadFiles/", "/home/contintegration/Desktop/Upload/");
@@ -54,6 +69,7 @@ public class Ftp {
 
 
 		compareFTPFilesDirectory("/home/contintegration/Desktop/src/","/home/contintegration/Desktop/dest/");
+
 		dirReport.writeFotterPart(wDir);
 		dirReport.closeReport(wDir);
 
@@ -102,13 +118,96 @@ public class Ftp {
 
 	}
 
+
+	/*public static String srcIdocFileName="";public static String destIdocFileName="";
+	public static String srcIdocFileNamePath="";public static String destIdocFileNamePath="";
+	 */
+	public static String getIdocFileNamePath(String path,String idocNumbere) throws SocketException, IOException{
+		idocNumbere=idocNumbere.trim();
+		String idocFileName="";
+		ArrayList<FTPFile> arrayDestFiles=new ArrayList<>();
+		arrayDestFiles.addAll(getFTPFilesList(path));
+		for(FTPFile file:arrayDestFiles){
+
+			if(file.isDirectory()){
+				getIdocFileNamePath(path+file.getName()+"/",idocNumbere);
+			}else{
+				String localIdocNumbere=getIDOCString(path+file.getName());
+				if(localIdocNumbere.contains(idocNumbere))
+				{
+					idocFileName= path+file.getName();
+					break;
+				}
+
+			}
+		}
+		return idocFileName;
+	}
+
+
+
+	public static void compareIdocNumberes(String srcDir,String destDir){
+
+		String sheetName="IDOC";
+		wDir=dirReport.createReport("D:\\Reports\\FTPReports\\IdocSummeryReport.html");
+		dirReport.writeHeaderPart(wDir);
+
+
+
+		Excel excel=new Excel();
+		try {
+			String idoc[]=excel.xlReadColumn(ExcelPath, sheetName, "IDOC_NO");
+			ArrayList<String> idocList=new ArrayList<>();
+			idocList.addAll(Arrays.asList(idoc));
+
+			for(String idocEach:idocList){
+
+				String srcIdocFile=	getIdocFileNamePath(srcDir, idocEach);
+				String destIdocFile=	getIdocFileNamePath(destDir, idocEach);
+				if(!srcIdocFile.equals("")&&!destIdocFile.equals("")){
+
+					String compPath1=srcIdocFile.substring(0, srcIdocFile.lastIndexOf("/")+1);
+					String compPath2=destIdocFile.substring(0, destIdocFile.lastIndexOf("/")+1);
+					String srcFileName=srcIdocFile.substring(srcIdocFile.lastIndexOf("/")+1, srcIdocFile.length());
+					String destFileName=destIdocFile.substring(destIdocFile.lastIndexOf("/")+1, destIdocFile.length());
+
+					Map<String, String> compare=compareFTPFiles(compPath1, compPath2, srcFileName, destFileName);
+					if(compare.get("flag").equals("true"))
+						dirReport.writeTableData_HyperLink(wDir, srcFileName,"("+idocEach+")", destFileName,"("+idocEach+")", "pass");
+					else
+						dirReport.writeTableData_HyperLink(wDir, srcFileName,"("+idocEach+")"+" has (Total:"+compare.get("S_T")+",Unique:"+compare.get("S_U")+",Diff:"+compare.get("S_D")+",Blank:"+compare.get("S_B")+")",
+								destFileName,"("+idocEach+")"+" has (Total:"+compare.get("D_T")+",Unique:"+compare.get("D_U")+",Diff:"+compare.get("D_D")+",Blank:"+compare.get("D_B")+")", "fail");
+
+				}else{
+
+					dirReport.writeTableData(wDir, !srcIdocFile.equals("") ? idocEach+" idoc has found in Src @ "+srcIdocFile:idocEach+" idoc has not found in Src", !destIdocFile.equals("") ? idocEach+" idoc has found in dest @ "+destIdocFile:idocEach+" idoc has not found in dest", "fail");
+				}
+			}			
+
+			dirReport.writeFotterPart(wDir);
+			dirReport.closeReport(wDir);
+
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+
+
+
+	}
+
+
 	public static String getIDOCString(String path) throws IOException{
 
 		BufferedReader reader1 = new BufferedReader(new InputStreamReader(getFTPFile(path)));
 		String line=reader1.readLine();
 
 		do{
-			if(line.contains("<IDOC")){
+			/*if(line.contains("<IDOC")){
+				return line;
+			}*/
+			if(line.contains("<DOCNUM>")){
 				return line;
 			}
 			line=reader1.readLine();
@@ -286,15 +385,40 @@ public class Ftp {
 		return inSR;
 
 	}
+
+	public static String toDateFormat,fromDateFormat,dateFormate;
+
 	public static ArrayList<FTPFile> getFTPFilesList(String dir) throws SocketException, IOException{
 
 		FTPClient connection=getFTPConnection();
 
 		FTPFile[] dir1Files=connection.listFiles(dir);
-
-
 		ArrayList<FTPFile> arrayDir1Files=new ArrayList<>();
-		arrayDir1Files.addAll(Arrays.asList(dir1Files));
+
+
+		if (toDateFormat!=null && fromDateFormat!=null) {
+
+			Date fromDate=getDate(dateFormate, fromDateFormat);
+			Date toDate=getDate(dateFormate, toDateFormat);
+
+
+			for(FTPFile file:dir1Files)
+			{
+				Date ftpFileDate=file.getTimestamp().getTime();
+				if(fromDate.before(ftpFileDate)&&toDate.after(ftpFileDate)){
+					arrayDir1Files.add(file);
+					//System.out.println(file.getName()+":"+file.getTimestamp().getTime());
+				}
+			}
+
+
+		}else{
+			arrayDir1Files.addAll(Arrays.asList(dir1Files));
+
+		}
+
+
+
 
 		closeFTPConnection(connection);
 
@@ -446,6 +570,17 @@ public class Ftp {
 		String line2 = reader2.readLine();
 
 		boolean areEqual = true;
+
+
+		String newStr="";
+
+		if(line1.length()!=line2.length()){
+
+			if(line1.length()>line2.length()){
+
+			}
+
+		}
 
 		int srcLineNo = 1,destLineNo = 1,uniqueLinesNo = 0,diffLinesNo = 0;
 		ArrayList<Integer> srcblankLine=new ArrayList<>();
@@ -725,27 +860,27 @@ public class Ftp {
 
 	public static boolean verifyRuleSet(String str1,String str2){
 		try{
-			String ExcelPath=".//src//com//incture//proj//testData//FileCompareRulesSet.xlsx";
+
 			String sheetName="Rules";
 
 			Excel ex=new Excel();
 			String[][] sheetData=ex.xlReadSheet(ExcelPath, sheetName);
-			
+
 			int RuleName=0,RuleExampleData=1,RuleRegExpression=2,RuleRegReplace=3;
 
-			
+
 			Map<String, String> formatStringEg=new HashMap<>();
 			Map<String, String> formatExpression=new HashMap<>();
 			Map<String, String> formatReplace=new HashMap<>();
-			
+
 			for(int i=1;i<sheetData.length;i++){
-			
+
 				formatStringEg.put(sheetData[i][RuleName], sheetData[i][RuleExampleData]);
 				formatExpression.put(sheetData[i][RuleName],sheetData[i][RuleRegExpression]);
 				formatReplace.put(sheetData[i][RuleName],sheetData[i][RuleRegReplace]);
 			}
-			
-/*
+
+			/*
 			formatStringEg.put("format1", "HEADER 2/17/2016 1:17:31 PM  ");
 			formatExpression.put("format1", ".*\\s\\d{1,2}[\\/|-]{1}\\d{1,2}[\\/|-]{1}\\d{1,4}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}\\s[APM]{2}.*");
 			formatReplace.put("format1", "\\d{1,2}[\\/|-]{1}\\d{1,2}[\\/|-]{1}\\d{1,4}\\s\\d{1,2}:\\d{1,2}:\\d{1,2}\\s[APM]{2}");
@@ -753,7 +888,7 @@ public class Ftp {
 			formatStringEg.put("format2", "<order>12345675</order>");
 			formatExpression.put("format2", ".*<order>\\d{8}</order>*.");
 			formatReplace.put("format2", "\\d{8}");
-*/
+			 */
 
 
 
@@ -785,5 +920,17 @@ public class Ftp {
 		}
 		return false;
 	}
+
+	public static Date getDate(String formate,String date){
+		try{
+			SimpleDateFormat formatter = new SimpleDateFormat(formate);
+			return formatter.parse(date);			
+		}catch (Exception e) {
+			System.out.println(e.getMessage());
+		}
+		return null;
+	}
+
+
 
 }
