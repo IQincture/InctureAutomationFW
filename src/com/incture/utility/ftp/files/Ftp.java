@@ -38,24 +38,24 @@ public class Ftp {
 	public static void main(String[] args) throws SocketException, IOException {
 
 
-		dateFormate="dd-MMM-yyyy HH:mm:ss";
+		/*dateFormate="dd-MMM-yyyy HH:mm:ss";
 
-		/*		fromDateFormat = "11-Jan-2018 16:00:00";
+		fromDateFormat = "11-Jan-2018 16:00:00";
 		toDateFormat = "11-Jan-2018 18:00:00";
-		 */
-		/*fromDateFormat = "11-Jan-2018 16:00:00";
+
+		fromDateFormat = "11-Jan-2018 16:00:00";
 		toDateFormat = "13-Jan-2018 18:00:00";
-		 */
+
 
 		fromDateFormat = "13-Jan-2018 16:00:00";
 		toDateFormat = "16-Jan-2018 18:00:00";
+		 */
 
-
-		compareIdocNumberes("/home/contintegration/Desktop/src/", "/home/contintegration/Desktop/dest/");
+		//compareIdocNumberes("/home/contintegration/Desktop/src/", "/home/contintegration/Desktop/dest/");
 
 
 		//compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/Folder1/", "Gentran_Sample_File.txt", "Gentran_Sample_File.txt");
-		//	compareFTPFilesDirectory_report();
+		compareFTPFilesDirectory_report();
 		//oneToManyFileComparision("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/", "Asame.xml");
 		//compareFTPFiles("/home/contintegration/Desktop/src/Folder1/", "/home/contintegration/Desktop/dest/Folder1/", "File_4.txt", "File_4.txt");
 		//uploadDirectory("D:/uploadFiles/", "/home/contintegration/Desktop/Upload/");
@@ -170,8 +170,15 @@ public class Ftp {
 					String compPath2=destIdocFile.substring(0, destIdocFile.lastIndexOf("/")+1);
 					String srcFileName=srcIdocFile.substring(srcIdocFile.lastIndexOf("/")+1, srcIdocFile.length());
 					String destFileName=destIdocFile.substring(destIdocFile.lastIndexOf("/")+1, destIdocFile.length());
+					//s1.substring(s1.lastIndexOf("."), s1.length())
+					Map<String, String> compare=null;
 
-					Map<String, String> compare=compareFTPFiles(compPath1, compPath2, srcFileName, destFileName);
+					if(srcFileName.substring(srcFileName.lastIndexOf("."),srcFileName.length()).equals(".xml") && 
+							destFileName.substring(destFileName.lastIndexOf("."),destFileName.length()).equals(".xml"))
+						compare=compareFTPFiles_XML(compPath1, compPath2, srcFileName, destFileName);
+					else
+						compare=compareFTPFiles(compPath1, compPath2, srcFileName, destFileName);
+
 					if(compare.get("flag").equals("true"))
 						dirReport.writeTableData_HyperLink(wDir, srcFileName,"("+idocEach+")", destFileName,"("+idocEach+")", "pass");
 					else
@@ -267,12 +274,20 @@ public class Ftp {
 					if(dir1File.isDirectory())
 						compareFTPFilesDirectory(dir1+dir1File.getName()+"/", dir2+dir2File.getName()+"/");
 					else if(dir1File.isFile()){
-						Map<String, String> compare=compareFTPFiles(dir1, dir2,dir1File.getName(),dir2File.getName());
+
+						Map<String, String> compare=null;
+						if(dir1File.getName().contains(".")&&dir2File.getName().contains(".")
+								&&dir1File.getName().substring(dir1File.getName().lastIndexOf("."),dir1File.getName().length()).equals(".xml") && 
+								dir2File.getName().substring(dir2File.getName().lastIndexOf("."),dir2File.getName().length()).equals(".xml"))
+							compare=compareFTPFiles_XML(dir1, dir2,dir1File.getName(),dir2File.getName());
+						else
+							compare=compareFTPFiles(dir1, dir2,dir1File.getName(),dir2File.getName());
 						if(compare.get("flag").equals("true"))
 							dirReport.writeTableData_HyperLink(wDir, dir1File.getName(),"", dir2File.getName(),"", "pass");
 						else
 							dirReport.writeTableData_HyperLink(wDir, dir1File.getName()," has (Total:"+compare.get("S_T")+",Unique:"+compare.get("S_U")+",Diff:"+compare.get("S_D")+",Blank:"+compare.get("S_B")+")",
 									dir2File.getName()," has (Total:"+compare.get("D_T")+",Unique:"+compare.get("D_U")+",Diff:"+compare.get("D_D")+",Blank:"+compare.get("D_B")+")", "fail");
+
 					}
 				}
 
@@ -678,6 +693,185 @@ public class Ftp {
 
 		return results;
 	}
+
+
+	/**
+	 * compareFTPFiles --> this method is to compare the files only in current src & destination directorys
+	 * @param compPath1 Eg:- /home/contintegration/Desktop/demo/
+	 * @param compPath2
+	 * @param fileName  Eg:- File_2.odt
+	 * @throws IOException
+	 */
+	public static Map<String, String> compareFTPFiles_XML(String compPath1,String compPath2,String srcFileName,String destFileName) throws IOException{
+
+		Map<String, String>	results=new HashMap<>();
+
+
+		/*if(fileName.equals("same.txt")){
+			System.out.println();
+		}*/
+		FileReporting ftp=new FileReporting();
+		Writer w=ftp.createReport("D:\\Reports\\FTPReports\\"+srcFileName+"_"+destFileName+".html");
+		ftp.writeHeaderPart(w);
+
+		FTPClient ftpCon1=Ftp.getFTPConnection();
+		FTPClient ftpCon2=Ftp.getFTPConnection();
+		///home/contintegration/Desktop/src/Folder1/Demo.xml
+
+		InputStream inSR=ftpCon1.retrieveFileStream(compPath1+srcFileName);
+		InputStream outSR=ftpCon2.retrieveFileStream(compPath2+destFileName);
+		InputStreamReader inISR=new InputStreamReader(inSR);
+		InputStreamReader ourISR=new InputStreamReader(outSR);
+
+
+		BufferedReader reader1 = new BufferedReader(inISR);
+
+		BufferedReader reader2 = new BufferedReader(ourISR);
+
+		String line1 =  reader1.readLine();
+
+		String line2 = reader2.readLine();
+
+		boolean areEqual = true;
+
+
+		String newStr="";
+
+		if(line1.length()!=line2.length()){
+
+			if(line1.length()>line2.length()){
+
+			}
+
+		}
+
+		int srcLineNo = 1,destLineNo = 1,uniqueLinesNo = 0,diffLinesNo = 0;
+		int srcSplit=0,destSplit=0;
+		ArrayList<Integer> srcblankLine=new ArrayList<>();
+		ArrayList<Integer> destblankLine=new ArrayList<>();
+
+		do
+		{
+			// code start to handle .xml line mapping -- starts
+
+			if(! line1.equals(line2) && (line1.contains("<") ||line2.contains("<") ) )
+			{
+
+				while(!line1.contains("</") && !line1.contains("<?"))
+				{
+					line1=line1.concat(reader1.readLine());
+					srcSplit++;
+				}
+
+				while(!line2.contains("</") && !line2.contains("<?"))
+				{
+					line2=line2.concat(reader2.readLine());
+					destSplit++;
+				}
+
+			}
+
+			//code start to handle .xml line mapping -- ends
+
+
+
+
+
+			if(line1 == null || line2 == null)
+			{
+				areEqual = false;
+
+				//break;
+			}
+			else if(! line1.equals(line2))
+			{
+
+				if(verifyRuleSet(line1, line2)){
+
+					ftp.writeTableData(w, line1.replaceAll("<", "&lt").replaceAll(">", "&gt"), line2.replaceAll("<", "&lt").replaceAll(">", "&gt"), "warning");
+				}else{
+
+
+					areEqual = false;
+					System.out.println(srcFileName+"(Src) & "+destFileName+"(Dest)-  Mismatch data  @   "+line1+" --and destination file  has --"+line2+" at line"+srcLineNo);
+					diffLinesNo++;
+					ftp.writeTableData(w, line1.replaceAll("<", "&lt").replaceAll(">", "&gt"), line2.replaceAll("<", "&lt").replaceAll(">", "&gt"), "fail");
+				}
+
+				//break;
+			}else{
+				uniqueLinesNo++;
+				ftp.writeTableData(w, line1.replaceAll("<", "&lt").replaceAll(">", "&gt"), line2.replaceAll("<", "&lt").replaceAll(">", "&gt"), "pass");	
+			}
+
+			do{
+				line1 = reader1.readLine();
+				srcLineNo++;
+
+				if(line1==null)break;
+				if(line1.equals(""))srcblankLine.add(srcLineNo);
+			}while(line1.equals(""));
+			do{
+				line2 = reader2.readLine();
+				destLineNo++;
+
+				if(line2==null)break;
+				if(line2.equals(""))destblankLine.add(destLineNo);
+			}while(line2.equals(""));
+
+
+		}while (line1 != null || line2 != null);
+
+		if(areEqual)
+		{	
+			System.out.println(srcFileName+"(Src) & "+destFileName+"(Dest)- has same content.");
+			ftp.writeTableData(w, srcFileName, destFileName, "pass");	
+
+		}
+		if(srcLineNo>destLineNo){
+			System.out.println(srcFileName+"(Src) file contains "+srcblankLine.size()+" blank line at "+srcblankLine+" and "+destFileName+"(Dest) file contains "+destblankLine.size()+"  blank line  at "+destblankLine );
+			ftp.writeTableData(w, srcFileName+"(Src) file contains "+srcblankLine.size()+" blank line at "+srcblankLine, destFileName+"(Dest) file contains "+destblankLine.size()+"  blank line  at "+destblankLine, "fail");	
+		}
+		if(srcLineNo<destLineNo)
+		{
+			System.out.println(srcFileName+"(Src) file contains "+srcblankLine.size()+" blank line at "+srcblankLine+" and "+destFileName+"(Dest) file contains "+destblankLine.size()+"  blank line  at "+destblankLine );
+			ftp.writeTableData(w, srcFileName+"(Src) file contains "+srcblankLine.size()+" blank line at "+srcblankLine, destFileName+"(Dest) file contains "+destblankLine.size()+"  blank line  at "+destblankLine, "fail");
+		}
+
+		if(srcSplit!=0 || destSplit!=0)
+		{
+			ftp.writeTableData(w, srcFileName+"(Src) file contains "+srcSplit+" split lines ", destFileName+"(Dest) file contains "+destSplit+" split lines ", "warning");
+		}
+
+		/*if(srcLineNo<destLineNo)System.out.println(destFileName+" Destination file has "+(destLineNo-srcLineNo)+"blank No number of lines ");
+		if(srcLineNo>destLineNo)System.out.println(srcFileName+" Src file has "+(srcLineNo-destLineNo)+"blank No number of lines ");
+		 */
+
+		reader1.close();
+
+		reader2.close();
+
+		Ftp.closeFTPConnection(ftpCon1);
+		Ftp.closeFTPConnection(ftpCon2);
+		ftp.writeFotterPart(w);
+		ftp.closeReport(w);
+
+		results.put("S_T", srcLineNo+"");
+		results.put("S_U", uniqueLinesNo+"");
+		results.put("S_B",srcblankLine.size()+"");
+		results.put("S_D", diffLinesNo+"");
+
+		results.put("D_T", destLineNo+"");
+		results.put("D_U", uniqueLinesNo+"");
+		results.put("D_B",destblankLine.size()+"");
+		results.put("D_D", diffLinesNo+"");
+
+		results.put("flag",areEqual+"");
+
+		return results;
+	}
+
+
 	/**
 	 * uploadFile --> is to upload file to remote ftp server
 	 * @param localFilePath eg:- D:/uploadFiles/Testing.pdf
