@@ -174,7 +174,13 @@ public class FileReporting {
 				w.write("<td >"+charDiff(destText, srcText,"warning")+"</td>");
 				w.write("<td class='warning'>"+status+"</td>");
 
-			}		
+			}	else if(status.equals("info"))		{
+				w.write("<td >"+srcText+"</td>");
+				w.write("<td >"+destText+"</td>");
+				w.write("<td class='warning'>"+status+"</td>");
+
+			
+			}	
 			w.write("  </tr>");
 
 		} catch (IOException e) {
