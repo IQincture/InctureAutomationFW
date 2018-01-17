@@ -68,7 +68,7 @@ public class Ftp {
 		dirReport.writeHeaderPart(wDir);
 
 
-		compareFTPFilesDirectory("/home/contintegration/Desktop/src/","/home/contintegration/Desktop/dest/");
+		compareFTPFilesDirectory("/S4DEV_PO_TO_CARRIER/","/home/contintegration/Desktop/dest/");
 
 		dirReport.writeFotterPart(wDir);
 		dirReport.closeReport(wDir);
@@ -443,6 +443,24 @@ public class Ftp {
 	public static FTPClient getFTPConnection() throws SocketException, IOException{
 
 		FTPClient ftpClient = new FTPClient();
+		ftpClient.connect("b2btst.hersheys.com", 21);
+		int replyCode = ftpClient.getReplyCode();
+		if (!FTPReply.isPositiveCompletion(replyCode)) {
+			System.out.println("Connection failed");
+			return null;
+		}
+
+		boolean success = ftpClient.login("S4DEV_PO_TO_CARRIER", "CNd07Mc2");
+		if (!success) {
+			System.out.println("Could not login to the server");
+			return null;
+		}
+		return ftpClient;	
+		
+		
+
+/*
+		FTPClient ftpClient = new FTPClient();
 		ftpClient.connect("192.168.5.36", 21);
 		int replyCode = ftpClient.getReplyCode();
 		if (!FTPReply.isPositiveCompletion(replyCode)) {
@@ -456,6 +474,7 @@ public class Ftp {
 			return null;
 		}
 		return ftpClient;	
+	*/
 	}
 
 	public static void closeFTPConnection(FTPClient ftpClient) throws IOException{

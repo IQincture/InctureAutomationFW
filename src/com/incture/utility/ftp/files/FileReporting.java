@@ -424,19 +424,19 @@ public class FileReporting {
 	//---------- new code ---------
 
 	public static StringBuffer findDiffStrings(String s1, String s2,String fail_warning){
-		/*
+		
 		if(s1.length()==s2.length())
 		{
-		 *///return charDiff(s1, s2, fail_warning);
-		/*}else {
-			return printCommonSubstrings(s1, s2, fail_warning);
+			return charDiff(s1, s2, fail_warning);
+		}else {
+			return	imp_Html_SpecialCharter(s1, s2, fail_warning);
 		}
-		 */
+		 
 
 		//	return printCommonSubstrings(s1, s2, fail_warning);
 		//return charDiff(s1, s2, fail_warning);
 		//return get_Str1_Html_SpecialCharter(s1, s2, fail_warning);
-		return	imp_Html_SpecialCharter(s1, s2, fail_warning);
+		//return	imp_Html_SpecialCharter(s1, s2, fail_warning);
 		//	return get_Str1_Html(s1, s2, fail_warning);
 	}
 
