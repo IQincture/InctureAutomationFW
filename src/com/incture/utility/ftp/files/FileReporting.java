@@ -8,8 +8,12 @@ import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.regex.Pattern;
+
+import com.incture.utility.excel.Excel;
 
 public class FileReporting {
 
@@ -179,7 +183,7 @@ public class FileReporting {
 				w.write("<td >"+destText+"</td>");
 				w.write("<td class='warning'>"+status+"</td>");
 
-			
+
 			}	
 			w.write("  </tr>");
 
@@ -424,14 +428,14 @@ public class FileReporting {
 	//---------- new code ---------
 
 	public static StringBuffer findDiffStrings(String s1, String s2,String fail_warning){
-		
-		if(s1.length()==s2.length())
+
+		/*if(s1.length()==s2.length())
 		{
 			return charDiff(s1, s2, fail_warning);
-		}else {
-			return	imp_Html_SpecialCharter(s1, s2, fail_warning);
-		}
-		 
+		}else {*/
+		return	imp_Html_SpecialCharter(s1, s2, fail_warning);
+		/*}*/
+
 
 		//	return printCommonSubstrings(s1, s2, fail_warning);
 		//return charDiff(s1, s2, fail_warning);
@@ -466,7 +470,11 @@ public class FileReporting {
 		StringBuffer sb=new StringBuffer();
 		if(s1a.length==s2a.length){
 			for(int i=0;i<s1a.length;i++){
-				sb.append(printCommonSubstrings(s1a[i], s2a[i], fail_warning));
+				//if(rules.containsKey(s1aWithoutS[0]) && Arrays.asList(rules.get(s1aWithoutS[0]).split(",")).contains((i)+""))
+				if(rules.containsKey(s1aWithoutS[0]) && Arrays.asList(rules.get(s1aWithoutS[0]).split(",")).contains((i)+""))
+					sb.append(printCommonSubstrings(s1a[i], s2a[i], "warning"));
+				else 
+					sb.append(printCommonSubstrings(s1a[i], s2a[i], fail_warning));
 			}
 		}/*else if(s1a.length>s2a.length){
 
@@ -540,6 +548,26 @@ public class FileReporting {
 			}
 		}
 		return isSubstring;
+	}
+
+
+	public static Map<String,String> rules=null;
+
+	public static void loadRuleSetsfromExcel(String ExcelPath,String flow){
+		rules=new HashMap<>();
+
+		Excel ex=new Excel();
+		try {
+			String[][] sheetData=ex.xlReadSheet(ExcelPath, flow);
+
+			for(int i=1;i<sheetData.length;i++){
+				rules.put(sheetData[i][0], sheetData[i][1]);
+			}
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			System.out.println(e.getMessage());
+		}
+
 	}
 
 }
